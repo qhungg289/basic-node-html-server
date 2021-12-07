@@ -1,7 +1,7 @@
 const fs = require("fs");
 const http = require("http");
 
-const port = process.env.port || 8080;
+const port = process.env.port || 8000;
 
 const server = http.createServer((req, res) => {
 	switch (req.url.toLowerCase()) {
