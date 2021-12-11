@@ -1,60 +1,53 @@
-const fs = require("fs");
-const http = require("http");
+const express = require("express");
+const app = express();
 
 const port = process.env.port || 8000;
 
-const server = http.createServer((req, res) => {
-	switch (req.url.toLowerCase()) {
-		case "/":
-			fs.readFile("./public/index.html", (err, data) => {
-				if (err) {
-					console.error(err);
-					return;
-				}
+app.use(express.static("public"));
 
-				res.writeHead(200, { "Content-Type": "text/html" });
-				res.end(data);
-			});
-			break;
+const options = { root: "public" };
 
-		case "/about":
-			fs.readFile("./public/about.html", (err, data) => {
-				if (err) {
-					console.error(err);
-					return;
-				}
-
-				res.writeHead(200, { "Content-Type": "text/html" });
-				res.end(data);
-			});
-			break;
-
-		case "/contact":
-			fs.readFile("./public/contact-me.html", (err, data) => {
-				if (err) {
-					console.error(err);
-					return;
-				}
-
-				res.writeHead(200, { "Content-Type": "text/html" });
-				res.end(data);
-			});
-			break;
-
-		default:
-			fs.readFile("./public/404.html", (err, data) => {
-				if (err) {
-					console.error(err);
-					return;
-				}
-
-				res.writeHead(404, { "Content-Type": "text/html" });
-				res.end(data);
-			});
-			break;
-	}
+app.get("/", (req, res) => {
+	res.sendFile("index.html", options, (err) => {
+		if (err) {
+			next(err);
+		} else {
+			console.log("Sent: index.html");
+		}
+	});
 });
 
-server.listen(port, () => {
+app.get("/about", (req, res) => {
+	res.sendFile("about.html", options, (err) => {
+		if (err) {
+			next(err);
+		} else {
+			console.log("Sent: about.html");
+		}
+	});
+});
+
+app.get("/contact", (req, res) => {
+	res.sendFile("contact-me.html", options, (err) => {
+		if (err) {
+			next(err);
+		} else {
+			console.log("Sent: contact-me.html");
+		}
+	});
+});
+
+app.get("*", (req, res) => {
+	res.status(404);
+	res.sendFile("404.html", options, (err) => {
+		if (err) {
+			next(err);
+		} else {
+			console.log("Sent: 404.html");
+		}
+	});
+});
+
+app.listen(port, () => {
 	console.log(`Server started on port ${port}`);
 });
