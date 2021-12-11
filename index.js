@@ -3,8 +3,6 @@ const app = express();
 
 const port = process.env.port || 8000;
 
-app.use(express.static("public"));
-
 const options = { root: "public" };
 
 app.get("/", (req, res) => {
