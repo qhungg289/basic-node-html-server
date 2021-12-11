@@ -35,7 +35,7 @@ app.get("/contact", (req, res) => {
 	});
 });
 
-app.get("*", (req, res) => {
+app.use((req, res) => {
 	res.status(404);
 	res.sendFile("404.html", options, (err) => {
 		if (err) {
